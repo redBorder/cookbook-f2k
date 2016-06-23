@@ -1,11 +1,12 @@
 cookbook-example CHANGELOG
 ==========================
 
-This file is used to list changes made in each version of the cookbook-example cookbook.
+This file is used to list changes made in each version of the example cookbook.
 
-0.1.0
+0.0.1
 -----
-- [your_name] - Initial release of cookbook-example
+- [your_name]
+  - COMMIT_REF Initial release of cookbook example
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
