@@ -1,13 +1,13 @@
 #
-# Cookbook Name:: example
+# Cookbook Name:: f2k
 # Recipe:: default
 #
-# Copyright 2016, YOUR_COMPANY_NAME
+# Copyright 2017, redborder
 #
-# All rights reserved - Do Not Redistribute
+# AFFERO GENERAL PUBLIC LICENSE, Version 3
 #
 
-cookbook_example_config "config" do
-  mystring "test"
+f2k_config "config" do
+	sensors node["redborder"]["sensors_info"]["flow-sensor"]
   action :add
 end

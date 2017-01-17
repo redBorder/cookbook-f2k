@@ -5,7 +5,7 @@ This file is used to list changes made in each version of the example cookbook.
 
 0.0.1
 -----
-- [your_name]
+- [Alberto Rodríguez <arodriguez@redborder.com]
   - COMMIT_REF Initial release of cookbook example
 
 - - -

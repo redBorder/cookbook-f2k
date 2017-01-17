@@ -1,6 +1,6 @@
-# example Cookbook
+# F2k Cookbook
 
-cookbook to install and configure redborder example cookbook
+cookbook to install and configure f2k service in redborder environments
 
 ### Platforms
 
@@ -23,4 +23,4 @@ cookbook to install and configure redborder example cookbook
 GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 
 ## Authors
-Authors: Your Name <yourname@redborder.com>
+Authors: Alberto Rodríguez <arodriguez@redborder.com>
