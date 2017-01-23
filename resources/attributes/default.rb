@@ -1,2 +1,2 @@
 #Flags
-default["example"]["attribute1"] = ""
+default["f2k"]["registered"] = false

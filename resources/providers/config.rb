@@ -52,7 +52,7 @@ action :add do #Usually used to install and configure something
       group "root"
       mode 0644
       retries 2
-      variables(  :cores => cores, 
+      variables(  :cores => cores,
                   :enrichment_enabled => enrichment_enabled,
                   :cache_dir => cache_dir,
                   :config_file => "#{config_dir}/config.json",
@@ -99,18 +99,22 @@ action :remove do #Usually used to uninstall something
 end
 
 action :register do #Usually used to register in consul
-  begin  
-    query = {}
-    query["ID"] = "f2k-#{node["hostname"]}"
-    query["Name"] = "f2k"
-    query["Address"] = "#{node["ipaddress"]}"
-    query["Port"] = 2055
-    json_query = Chef::JSONCompat.to_json(query)
+  begin
+    if !node["f2k"]["registered"]
+      query = {}
+      query["ID"] = "f2k-#{node["hostname"]}"
+      query["Name"] = "f2k"
+      query["Address"] = "#{node["ipaddress"]}"
+      query["Port"] = 2055
+      json_query = Chef::JSONCompat.to_json(query)
 
-    execute 'Register service in consul' do
-       command "curl http://localhost:8500/v1/agent/service/register -d '#{json_query}' &>/dev/null"
-       action :nothing
-    end.run_action(:run)
+      execute 'Register service in consul' do
+         command "curl http://localhost:8500/v1/agent/service/register -d '#{json_query}' &>/dev/null"
+         action :nothing
+      end.run_action(:run)
+
+      node.set["f2k"]["registered"] = true
+    end
     Chef::Log.info("f2k service has been registered in consul")
   rescue => e
     Chef::Log.error(e.message)
@@ -119,10 +123,14 @@ end
 
 action :deregister do #Usually used to deregister from consul
   begin
-    execute 'Deregister service in consul' do
+    if node["f2k"]["registered"]
+      execute 'Deregister service in consul' do
         command "curl http://localhost:8500/v1/agent/service/deregister/f2k-#{node["hostname"]} &>/dev/null"
         action :nothing
       end.run_action(:run)
+      
+      node.set["f2k"]["registered"] = false
+    end
     Chef::Log.info("f2k service has been deregistered from consul")
   rescue => e
     Chef::Log.error(e.message)
