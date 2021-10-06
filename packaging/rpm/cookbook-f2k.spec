@@ -1,6 +1,6 @@
 Name: cookbook-f2k
 Version: %{__version}
-Release: %{__release}%{?dist}
+Release: %{__release}%{?dist}.1
 BuildArch: noarch
 Summary: cookbook to deploy f2k in redborder environments
 
@@ -46,5 +46,8 @@ esac
 %doc
 
 %changelog
+* Wed Oct 06 2021 Javier Rodriguez <javiercrg@redborder.com> - 0.0.2-1
+- Added creation template directory
+
 * Mon Jan 16 2017 Alberto Rodríguez <arodriguez@redborder.com> - 0.0.1-1
 - first spec version
