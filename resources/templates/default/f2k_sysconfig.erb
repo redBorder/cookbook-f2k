@@ -14,6 +14,8 @@
 --dns-cache-timeout-s=14400
 --unprivileged-user=<%= @user %>
 --collector-port=2055
+--normalize-directions=
+--enable-ptr-dns=
 -X=socket.max.fails=3
 -X=socket.keepalive.enable=true
 -X=queue.buffering.max.messages=<%= @buffering_max_messages %>
