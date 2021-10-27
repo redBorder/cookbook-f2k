@@ -80,6 +80,7 @@ action :add do #Usually used to install and configure something
       retries 2
       variables(:sensors => sensors)
       helpers F2k::Renderer
+      notifies :reload, 'service[f2k]', :delayed
     end
 
     service "f2k" do
