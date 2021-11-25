@@ -2,6 +2,7 @@
 #
 # Provider:: config
 #
+include F2k::Helper
 
 action :add do #Usually used to install and configure something
   begin
@@ -42,6 +43,12 @@ action :add do #Usually used to install and configure something
       mode 0755
     end
 
+    directory "/etc/objects" do
+      owner "root"
+      group "root"
+      mode 0777
+      action :create
+    end
 
     # RPM Installation
     yum_package "f2k" do
@@ -81,6 +88,79 @@ action :add do #Usually used to install and configure something
       variables(:sensors => sensors)
       helpers F2k::Renderer
     end
+
+    # Objects templates
+    [ "icmps", "interfaces", "hosts" ].each do |ob|
+      objects = get_objects(ob)
+
+      template "/etc/objects/#{ob}" do
+        source "objects_hosts.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        retries 2
+        cookbook "f2k"
+        variables(:objects => objects)
+        notifies :reload, "service[f2k]", :delayed
+      end
+    end
+
+    [ "macs", "protocols", "services", "networks", "vlans" ].each do |ob|
+      ob_db = Chef::DataBagItem.load('rBglobal', ob) rescue ob_db = nil
+      objects = {}
+      if !ob_db.nil? and !ob_db["list"].nil? and !ob_db["list"].empty?
+        objects = ob_db["list"]
+      end
+
+      template "/etc/objects/#{ob}" do
+        source "objects.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        retries 2
+        cookbook "f2k"
+        variables(:objects => objects)
+        notifies :reload, "service[f2k]", :delayed
+      end
+    end
+
+    [ "http_domains", "http_host_l1_alias", "os", "engines" ].each do |ob|
+      template "/etc/objects/#{ob}" do
+        source "objects_#{ob}.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        retries 2
+        cookbook "f2k"
+        notifies :reload, "service[f2k]", :delayed
+      end
+    end
+
+    app_db = Chef::DataBagItem.load('rBglobal', 'applications') rescue app_db = nil
+
+    if app_db.nil? or app_db["list"].nil? or app_db["list"].empty?
+      template "/etc/objects/applications" do
+        source "objects_default_applications.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        retries 2
+        cookbook "f2k"
+        notifies :reload, "service[f2k]", :delayed
+      end
+    else
+      template "/etc/objects/applications" do
+        source "objects_applications.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        retries 2
+        cookbook "f2k"
+        variables(:applications => app_db["list"] )
+        notifies :reload, "service[f2k]", :delayed
+      end
+    end
+    # End objects templates
 
     service "f2k" do
       supports :status => true, :start => true, :restart => true, :reload => true, :stop => true
