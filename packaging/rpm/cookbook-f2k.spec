@@ -46,6 +46,8 @@ esac
 %doc
 
 %changelog
+* Fri Jan 07 2022 David Vanhoucke <dvanhoucke@redborder.com> - 0.0.5-1
+- change register to consul
 * Wed Oct 06 2021 Javier Rodriguez <javiercrg@redborder.com> - 0.0.2-1
 - Added creation template directory
 
