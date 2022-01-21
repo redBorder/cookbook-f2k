@@ -13,11 +13,11 @@ module F2k
     def get_objects(object_type)
       known_ips = get_known_ips
       objects = {}
-      if (!node["redBorder"].nil? and !node["redBorder"]["objects"].nil? and !node["redBorder"]["objects"][object_type].nil? and node["redBorder"]["objects"][object_type].class != Chef::Node::ImmutableArray)
+      if (!node["redborder"].nil? and !node["redborder"]["objects"].nil? and !node["redborder"]["objects"][object_type].nil? and node["redborder"]["objects"][object_type].class != Chef::Node::ImmutableArray)
         if object_type == "hosts"
-          objects = known_ips.merge(node["redBorder"]["objects"][object_type])
+          objects = known_ips.merge(node["redborder"]["objects"][object_type])
         else
-          objects = node["redBorder"]["objects"][object_type]
+          objects = node["redborder"]["objects"][object_type]
         end
       elsif object_type == "hosts"
         objects = known_ips
