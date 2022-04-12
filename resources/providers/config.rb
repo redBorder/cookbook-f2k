@@ -22,6 +22,7 @@ action :add do #Usually used to install and configure something
     # RPM Installation
     yum_package "f2k" do
       action :upgrade
+      flush_cache [ :before ]
     end
 
     #User creation
