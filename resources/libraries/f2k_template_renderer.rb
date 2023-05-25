@@ -10,7 +10,7 @@ module F2k
 			flow_nodes.each do |flow_node|
 			node_info = Chef::Node.load(flow_node.at(0))
 
-				if !node_info.nil? and !node_info[:ipaddress].nil? and node_info["redborder"]["parent_id"].nil?
+				if !node_info.nil? and !node_info[:ipaddress].nil?
 					config["sensors_networks"][node_info[:ipaddress]] = 
 							{} if config["sensors_networks"][node_info[:ipaddress]].nil?
 
