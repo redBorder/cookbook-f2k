@@ -46,6 +46,8 @@ esac
 %doc
 
 %changelog
+* Thu May 25 2023 Luis J. Blanco <ljblanco@redborder.com> - 0.0.7-1
+- parent_id removed from sensor info. Nodes are self aware of either manager or proxy
 * Fri Jan 07 2022 David Vanhoucke <dvanhoucke@redborder.com> - 0.0.5-1
 - change register to consul
 * Wed Oct 06 2021 Javier Rodriguez <javiercrg@redborder.com> - 0.0.2-1
