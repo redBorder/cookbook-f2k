@@ -46,6 +46,8 @@ esac
 %doc
 
 %changelog
+* Thu Sep 26 2023 Miguel Negrón <manegron@redborder.com> - 0.0.8-1
+- Install f2k before user creation (by Eduardo)
 * Thu May 25 2023 Luis J. Blanco <ljblanco@redborder.com> - 0.0.7-1
 - parent_id removed from sensor info. Nodes are self aware of either manager or proxy
 * Fri Jan 07 2022 David Vanhoucke <dvanhoucke@redborder.com> - 0.0.5-1
