@@ -19,6 +19,12 @@ action :add do #Usually used to install and configure something
       action :nothing
     end.run_action(:install)
 
+    # RPM Installation
+    yum_package "f2k" do
+      action :upgrade
+      flush_cache [ :before ]
+    end
+
     #User creation
     user user do
       action :create
@@ -48,11 +54,6 @@ action :add do #Usually used to install and configure something
       group "root"
       mode 0777
       action :create
-    end
-
-    # RPM Installation
-    yum_package "f2k" do
-      action :upgrade
     end
 
     # Memory calculation
