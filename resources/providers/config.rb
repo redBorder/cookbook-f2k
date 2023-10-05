@@ -20,7 +20,7 @@ action :add do #Usually used to install and configure something
     end.run_action(:install)
 
     # RPM Installation
-    yum_package "f2k" do
+    dnf_package "f2k" do
       action :upgrade
       flush_cache [ :before ]
     end
