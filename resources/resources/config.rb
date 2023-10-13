@@ -13,4 +13,4 @@ attribute :cache_dir, :kind_of => String, :default => "/var/cache/f2k"
 attribute :templates_dir, :kind_of => String, :default => "/var/cache/f2k/templates"
 attribute :config_dir, :kind_of => String, :default => "/etc/f2k"
 attribute :user, :kind_of => String, :default => "f2k"
-attribute :sensors, :kind_of => Array, :default => []
+attribute :sensors, :kind_of => Hash, :default => {}
