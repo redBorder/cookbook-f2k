@@ -3,7 +3,7 @@ module F2k
 
 		def config_hash(flow_nodes)
 
-	                require 'ruby_dig'
+	        require 'ruby_dig'
 
 			config = { "sensors_networks" => {} }
 
