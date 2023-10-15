@@ -26,8 +26,10 @@ action :add do #Usually used to install and configure something
     end
 
     #User creation
-    user user do
-      action :create
+    execute "create_user" do
+      command "/usr/sbin/useradd #{user}"
+      ignore_failure true
+      not_if "getent passwd #{user}"
     end
 
     # Directory creation
