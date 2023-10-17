@@ -15,10 +15,6 @@ action :add do #Usually used to install and configure something
     user = new_resource.user
     sensors = new_resource.sensors
 
-    chef_gem 'ruby_dig' do
-      action :nothing
-    end.run_action(:install)
-
     # RPM Installation
     dnf_package "f2k" do
       action :upgrade
