@@ -15,19 +15,17 @@ action :add do #Usually used to install and configure something
     user = new_resource.user
     sensors = new_resource.sensors
 
-    chef_gem 'ruby_dig' do
-      action :nothing
-    end.run_action(:install)
-
     # RPM Installation
-    yum_package "f2k" do
+    dnf_package "f2k" do
       action :upgrade
       flush_cache [ :before ]
     end
 
     #User creation
-    user user do
-      action :create
+    execute "create_user" do
+      command "/usr/sbin/useradd #{user}"
+      ignore_failure true
+      not_if "getent passwd #{user}"
     end
 
     # Directory creation
@@ -203,7 +201,7 @@ action :register do #Usually used to register in consul
         action :nothing
       end.run_action(:run)
 
-      node.set["f2k"]["registered"] = true
+      node.normal["f2k"]["registered"] = true
     end
     Chef::Log.info("f2k service has been registered in consul")
   rescue => e
@@ -219,7 +217,7 @@ action :deregister do #Usually used to deregister from consul
         action :nothing
       end.run_action(:run)
 
-      node.set["f2k"]["registered"] = false
+      node.normal["f2k"]["registered"] = false
     end
     Chef::Log.info("f2k service has been deregistered from consul")
   rescue => e
