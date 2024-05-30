@@ -104,7 +104,12 @@ action :add do
     end
 
     %w(macs protocols services networks vlans).each do |ob|
-      ob_db = Chef::DataBagItem.load('rBglobal', ob) rescue ob_db = nil
+      begin
+        ob_db = data_bag_item('rBglobal', ob)
+      rescue
+        ob_db = nil
+      end
+
       objects = {}
 
       if ob_db && ob_db['list'] && !ob_db['list'].empty?
@@ -135,7 +140,11 @@ action :add do
       end
     end
 
-    app_db = Chef::DataBagItem.load('rBglobal', 'applications') rescue app_db = nil
+    begin
+      app_db = datab_bag_item('rBglobal', 'applications')
+    rescue
+      app_db = nil
+    end
 
     if app_db || app_db['list'].nil? || app_db['list'].empty?
       template '/etc/objects/applications' do
@@ -212,7 +221,7 @@ action :deregister do
   begin
     if node['f2k']['registered']
       execute 'Deregister service in consul' do
-        command "curl -X PUT http://localhost:8500/v1/agent/service/deregister/f2k-#{node["hostname"]} &>/dev/null"
+        command "curl -X PUT http://localhost:8500/v1/agent/service/deregister/f2k-#{node['hostname']} &>/dev/null"
         action :nothing
       end.run_action(:run)
 
