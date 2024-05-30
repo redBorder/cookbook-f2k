@@ -1,3 +1,2 @@
-#Flags
-default["f2k"]["registered"] = false
-
+# Flags
+default['f2k']['registered'] = false
