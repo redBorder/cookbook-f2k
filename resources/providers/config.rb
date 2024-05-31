@@ -146,7 +146,7 @@ action :add do
       app_db = nil
     end
 
-    if app_db || app_db['list'].nil? || app_db['list'].empty?
+    if app_db.nil? || app_db['list'].nil? || app_db['list'].empty?
       template '/etc/objects/applications' do
         source 'objects_default_applications.erb'
         owner 'root'
