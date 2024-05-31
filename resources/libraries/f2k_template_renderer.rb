@@ -31,15 +31,15 @@ module F2k
           end
         end # end do |ss|
 
-        span_port = (node_info['redborder']['spanport'] && node_info['redborder']['spanport'].to_i == 1)
+        span_port = (node_info['redborder']['spanport'] && node_info['redborder']['spanport'].to_i == 1) ? true : false
         observation['span_port'] = span_port
 
         observation['exporter_in_wan_side'] = true
 
-        dns_ptr_target = (node_info['redborder']['dns_ptr_target'] && node_info['redborder']['dns_ptr_target'].to_i == 1)
+        dns_ptr_target = (node_info['redborder']['dns_ptr_target'] && node_info['redborder']['dns_ptr_target'].to_i == 1) ? true : false
         observation['dns_ptr_target'] = dns_ptr_target
 
-        dns_ptr_client = (node_info['redborder']['dns_ptr_target'] && node_info['redborder']['dns_ptr_client'].to_i == 1)
+        dns_ptr_client = (node_info['redborder']['dns_ptr_target'] && node_info['redborder']['dns_ptr_client'].to_i == 1) ? true : false
         observation['dns_ptr_client'] = dns_ptr_client
 
         observation['home_nets'] = []
