@@ -1,14 +1,14 @@
 module F2k
   module Renderer
     def config_hash(flow_nodes)
-      config = { 'sensors_networks': {} }
+      config = { sensors_networks: {} }
 
       flow_nodes.each do |flow_node|
         node_info = Chef::Node.load(flow_node.at(0))
 
         next unless node_info && node_info[:ipaddress]
 
-        config['sensors_networks'][node_info[:ipaddress]] ||= {}
+        config[:sensors_networks][node_info[:ipaddress]] ||= {}
         observation = {}
         observation['enrichment'] = {}
 
@@ -56,12 +56,12 @@ module F2k
           end
         end
 
-        config['sensors_networks'][node_info[:ipaddress]]['observations_id'] ||= {}
+        config[:sensors_networks][node_info[:ipaddress]]['observations_id'] ||= {}
 
         observation_id = node_info['redborder']['observation_id'] || 'default'
         observation_id = 'default' if observation_id.empty?
 
-        config['sensors_networks'][node_info[:ipaddress]]['observations_id'][observation_id] = observation
+        config[:sensors_networks][node_info[:ipaddress]]['observations_id'][observation_id] = observation
       end
 
       config
