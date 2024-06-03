@@ -1,13 +1,8 @@
-#
-# Cookbook Name:: f2k
+# Cookbook:: f2k
 # Recipe:: default
-#
-# Copyright 2017, redborder
-#
-# AFFERO GENERAL PUBLIC LICENSE, Version 3
-#
+# Copyright:: 2024, redborder
+# License:: Affero General Public License, Version 3
 
-f2k_config "config" do
-	sensors node["redborder"]["sensors_info"]["flow-sensor"]
+f2k_config 'config' do
   action :add
 end
