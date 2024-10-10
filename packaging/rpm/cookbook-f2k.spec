@@ -23,6 +23,9 @@ chmod -R 0755 %{buildroot}/var/chef/cookbooks/f2k
 install -D -m 0644 README.md %{buildroot}/var/chef/cookbooks/f2k/README.md
 
 %pre
+if [ -d /var/chef/cookbooks/f2k ]; then
+    rm -rf /var/chef/cookbooks/f2k
+fi
 
 %post
 case "$1" in
@@ -36,6 +39,12 @@ case "$1" in
   ;;
 esac
 
+%postun
+# Deletes directory when uninstall the package
+if [ "$1" = 0 ] && [ -d /var/chef/cookbooks/f2k ]; then
+  rm -rf /var/chef/cookbooks/f2k
+fi
+
 %files
 %defattr(0755,root,root)
 /var/chef/cookbooks/f2k
@@ -46,14 +55,20 @@ esac
 %doc
 
 %changelog
-* Thu Sep 26 2023 Miguel Negrón <manegron@redborder.com> - 0.0.8-1
+* Thu Oct 10 2024 Miguel Negrón <manegron@redborder.com>
+- Add pre and postun
+
+* Thu Sep 26 2023 Miguel Negrón <manegron@redborder.com>
 - Install f2k before user creation (by Eduardo)
-* Thu May 25 2023 Luis J. Blanco <ljblanco@redborder.com> - 0.0.7-1
+
+* Thu May 25 2023 Luis J. Blanco <ljblanco@redborder.com>
 - parent_id removed from sensor info. Nodes are self aware of either manager or proxy
-* Fri Jan 07 2022 David Vanhoucke <dvanhoucke@redborder.com> - 0.0.5-1
+
+* Fri Jan 07 2022 David Vanhoucke <dvanhoucke@redborder.com>
 - change register to consul
-* Wed Oct 06 2021 Javier Rodriguez <javiercrg@redborder.com> - 0.0.2-1
+
+* Wed Oct 06 2021 Javier Rodriguez <javiercrg@redborder.com>
 - Added creation template directory
 
-* Mon Jan 16 2017 Alberto Rodríguez <arodriguez@redborder.com> - 0.0.1-1
+* Mon Jan 16 2017 Alberto Rodríguez <arodriguez@redborder.com>
 - first spec version
