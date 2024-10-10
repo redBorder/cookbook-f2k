@@ -1,9 +1,14 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 0.0.10
+
+  - Miguel Negrón
+    - [8cbe7c0] Add pre and postun to clean the cookbook
+
 ## 0.0.9
 
-  - Miguel Negron
+  - Miguel Negrón
     - [ff7dfdb] Merge branch 'development' into improvement/fix_lint
     - [b425caa] Lint recipes 2
     - [38b85ad] Lint providers 2
