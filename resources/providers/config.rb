@@ -72,7 +72,7 @@ action :add do
                 dns_cache_size_mb: dns_cache_size_mb,
                 user: user,
                 buffering_max_messages: buffering_max_messages)
-      notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+      notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
     end
 
     template "#{config_dir}/config.json" do
@@ -84,7 +84,7 @@ action :add do
       retries 2
       variables(sensors: sensors)
       helpers F2k::Renderer
-      notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+      notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
     end
 
     # Objects templates
@@ -99,7 +99,7 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(objects: objects)
-        notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -124,7 +124,7 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(objects: objects)
-        notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -136,7 +136,7 @@ action :add do
         mode '0644'
         retries 2
         cookbook 'f2k'
-        notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -154,7 +154,7 @@ action :add do
         mode '0644'
         retries 2
         cookbook 'f2k'
-        notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     else
       template '/etc/objects/applications' do
@@ -165,7 +165,7 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(applications: app_db['list'])
-        notifies :reload, 'service[f2k]', :delayed  unless node['redborder']['leader_configuring']
+        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
     # End objects templates
