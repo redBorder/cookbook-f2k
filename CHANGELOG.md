@@ -1,6 +1,11 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.0
+
+  - Miguel Negrón
+    - [88dc4e1] Improvement/boost installation stage 1 (#8)
+
 ## 0.0.10
 
   - Miguel Negrón
