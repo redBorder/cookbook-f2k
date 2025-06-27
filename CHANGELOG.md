@@ -1,6 +1,11 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.1
+
+  - nilsver
+    - [6a91294] remove flush cache
+
 ## 1.0.0
 
   - Miguel Negrón
