@@ -17,7 +17,6 @@ action :add do
     # RPM Installation
     dnf_package 'f2k' do
       action :upgrade
-      flush_cache [ :before ]
     end
 
     # User creation
