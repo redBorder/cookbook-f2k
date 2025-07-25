@@ -1,6 +1,11 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.2
+
+  - jnavarrorb
+    - [639b0f9] Remove executable permissions on non-executable files
+
 ## 1.0.1
 
   - nilsver
