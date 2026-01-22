@@ -56,6 +56,15 @@ action :add do
     dns_cache_size_mb = [memory_kb / (4 * 1024), 10].max.to_i
     buffering_max_messages = [memory_kb / 4, 1000].max.to_i
 
+    service 'f2k' do
+      supports status: true, start: true, restart: true, reload: true, stop: true
+      if node['redborder']['leader_configuring']
+        action [:enable, :stop]
+      else
+        action [:enable, :start]
+      end
+    end
+
     # Templates
     template '/etc/sysconfig/f2k' do
       source 'f2k_sysconfig.erb'
@@ -168,15 +177,6 @@ action :add do
       end
     end
     # End objects templates
-
-    service 'f2k' do
-      supports status: true, start: true, restart: true, reload: true, stop: true
-      if node['redborder']['leader_configuring']
-        action [:enable, :stop]
-      else
-        action [:enable, :start]
-      end
-    end
 
     Chef::Log.info('f2k cookbook has been processed')
   rescue => e
