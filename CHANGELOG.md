@@ -1,6 +1,11 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.3
+
+  - manegron
+    - [65a9830] Move service definition to the top
+
 ## 1.0.2
 
   - jnavarrorb
