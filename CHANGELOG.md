@@ -1,6 +1,13 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.5
+
+  - manegron
+    - [eee3470] Add extra check
+    - [0d2902e] Bump version
+    - [1310b67] Add rescue
+
 ## 1.0.4
 
   - manegron
