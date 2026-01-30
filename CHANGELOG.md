@@ -1,6 +1,11 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.4
+
+  - manegron
+    - [1310b67] Add rescue
+
 ## 1.0.3
 
   - manegron
