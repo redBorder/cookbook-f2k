@@ -3,7 +3,12 @@ module F2k
     def get_known_ips
       known_ips = {}
       Chef::Node.list.keys.sort.each do |node_key|
-        node = Chef::Node.load node_key
+        node = nil
+        begin
+          node = Chef::Node.load node_key
+        rescue
+          Chef::Log.error("[get_known_ips] Failed to load node: #{node_key}")
+        end
         next unless node['ipaddress'] && (node.name || node['rbname'])
         node_name = node['rbname'] || node.name
         known_ips[node_name] = node['ipaddress']
