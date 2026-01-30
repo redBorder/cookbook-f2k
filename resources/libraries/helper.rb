@@ -7,7 +7,7 @@ module F2k
         begin
           node = Chef::Node.load node_key
         rescue
-          Chef::Log.error("[get_known_ips] Failed to load node: #{node_key}")
+          Chef::Log.warn("[get_known_ips] Failed to load node: #{node_key}")
         end
         next unless node && node['ipaddress'] && (node.name || node['rbname'])
 
