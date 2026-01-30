@@ -9,7 +9,8 @@ module F2k
         rescue
           Chef::Log.error("[get_known_ips] Failed to load node: #{node_key}")
         end
-        next unless node['ipaddress'] && (node.name || node['rbname'])
+        next unless node && node['ipaddress'] && (node.name || node['rbname'])
+
         node_name = node['rbname'] || node.name
         known_ips[node_name] = node['ipaddress']
       end
