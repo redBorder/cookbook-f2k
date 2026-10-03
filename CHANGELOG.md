@@ -1,6 +1,19 @@
 cookbook-f2k CHANGELOG
 ===============
 
+## 1.0.6
+
+  - manegron
+    - [bbf5389] Upload cookbook only if opscode-erchef is active
+    - [fe5416d] Merge branch 'master' into development
+    - [16ed7f4] Change log level
+    - [ec5e5c2] Bump version
+    - [eee3470] Add extra check
+    - [0d2902e] Bump version
+    - [1310b67] Add rescue
+  - Miguel Negrón
+    - [fe5416d] Merge branch 'master' into development
+
 ## 1.0.5
 
   - manegron
