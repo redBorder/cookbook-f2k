@@ -85,6 +85,9 @@ module F2k
         'client_id' => 'f2k',
         'async' => true,
         'stats_socket' => '/run/f2k/f2k.sock',
+        # keepalived health checks /health on this port from the other managers
+        'stats_bind' => '0.0.0.0',
+        'stats_port' => 7983,
         'hosts_path' => '/etc/objects',
         'applications_file' => '/etc/objects/applications',
         'listeners' => [listener],
