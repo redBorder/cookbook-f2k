@@ -71,6 +71,10 @@ module F2k
         'span_port' => !span_ports.empty? && span_ports.all?,
         'enrichment_key' => 'sensor_ip',
         'enrichment_map' => enrichment_map,
+        # x2kafka only refreshes a template when the exporter resends it, and
+        # cisco resends every 30 minutes (the x2kafka default TTL), so keep
+        # them longer than that
+        'template_ttl_seconds' => 3600,
       }
       # without home_nets x2kafka falls back to the private ranges
       listener['home_nets'] = home_nets.uniq unless home_nets.empty?
