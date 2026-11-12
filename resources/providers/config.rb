@@ -7,6 +7,14 @@ action :add do
   begin
     config_dir = new_resource.config_dir
     sensors = new_resource.sensors
+    settings = {
+      port: new_resource.port,
+      bind: new_resource.bind,
+      brokers: new_resource.kafka_brokers,
+      topic: new_resource.kafka_topic,
+      stats_port: new_resource.stats_port,
+      template_ttl: new_resource.template_ttl,
+    }
 
     # redborder-f2k ships the f2k unit running x2kafka and obsoletes the legacy f2k package
     dnf_package 'redborder-f2k' do
@@ -60,7 +68,7 @@ action :add do
       group 'root'
       mode '0644'
       retries 2
-      variables(config: x2kafka_config(sensors))
+      variables(config: x2kafka_config(sensors, settings))
       notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
     end
 
@@ -173,7 +181,7 @@ action :register do
       query['ID'] = "f2k-#{node['hostname']}"
       query['Name'] = 'f2k'
       query['Address'] = "#{node['ipaddress']}"
-      query['Port'] = 2055
+      query['Port'] = new_resource.port
       json_query = Chef::JSONCompat.to_json(query)
 
       execute 'Register service in consul' do
