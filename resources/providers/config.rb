@@ -65,6 +65,8 @@ action :add do
     end
 
     # Objects templates
+    # x2kafka only reads /etc/objects/applications, so the rest of the objects must not
+    # reload f2k: every reload drops the netflow templates received so far
     %w(icmps interfaces hosts).each do |ob|
       objects = get_objects(ob)
 
@@ -76,7 +78,6 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(objects: objects)
-        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -101,7 +102,6 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(objects: objects)
-        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -113,7 +113,6 @@ action :add do
         mode '0644'
         retries 2
         cookbook 'f2k'
-        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
