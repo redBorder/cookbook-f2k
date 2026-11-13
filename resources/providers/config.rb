@@ -5,25 +5,28 @@ include F2k::Helper
 
 action :add do
   begin
-    cores = new_resource.cores
-    memory_kb = new_resource.memory_kb
-    enrichment_enabled = new_resource.enrichment_enabled
-    cache_dir = new_resource.cache_dir
     config_dir = new_resource.config_dir
-    templates_dir = new_resource.templates_dir
-    user = new_resource.user
     sensors = new_resource.sensors
 
-    # RPM Installation
-    dnf_package 'f2k' do
+    # redborder-f2k ships the f2k unit running x2kafka and obsoletes the legacy f2k package
+    dnf_package 'redborder-f2k' do
       action :upgrade
     end
 
-    # User creation
-    execute 'create_user' do
-      command "/usr/sbin/useradd #{user}"
-      ignore_failure true
-      not_if "getent passwd #{user}"
+    # restart f2k when a new x2kafka is installed
+    dnf_package 'x2kafka' do
+      action :upgrade
+      notifies :restart, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
+    end
+
+    # leftovers of the legacy f2k daemon
+    file '/etc/sysconfig/f2k' do
+      action :delete
+    end
+
+    directory '/var/cache/f2k' do
+      recursive true
+      action :delete
     end
 
     # Directory creation
@@ -33,28 +36,12 @@ action :add do
       mode '0755'
     end
 
-    directory cache_dir do
-      owner user
-      group user
-      mode '0755'
-    end
-
-    directory templates_dir do
-      owner user
-      group user
-      mode '0755'
-    end
-
     directory '/etc/objects' do
       owner 'root'
       group 'root'
       mode '0777'
       action :create
     end
-
-    # Memory calculation
-    dns_cache_size_mb = [memory_kb / (4 * 1024), 10].max.to_i
-    buffering_max_messages = [memory_kb / 4, 1000].max.to_i
 
     service 'f2k' do
       supports status: true, start: true, restart: true, reload: true, stop: true
@@ -66,23 +53,6 @@ action :add do
     end
 
     # Templates
-    template '/etc/sysconfig/f2k' do
-      source 'f2k_sysconfig.erb'
-      cookbook 'f2k'
-      owner 'root'
-      group 'root'
-      mode '0644'
-      retries 2
-      variables(cores: cores,
-                enrichment_enabled: enrichment_enabled,
-                cache_dir: cache_dir,
-                config_file: "#{config_dir}/config.json",
-                dns_cache_size_mb: dns_cache_size_mb,
-                user: user,
-                buffering_max_messages: buffering_max_messages)
-      notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
-    end
-
     template "#{config_dir}/config.json" do
       source 'f2k_config.erb'
       cookbook 'f2k'
@@ -90,12 +60,13 @@ action :add do
       group 'root'
       mode '0644'
       retries 2
-      variables(sensors: sensors)
-      helpers F2k::Renderer
+      variables(config: x2kafka_config(sensors))
       notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
     end
 
     # Objects templates
+    # x2kafka only reads /etc/objects/applications, so the rest of the objects must not
+    # reload f2k: every reload drops the netflow templates received so far
     %w(icmps interfaces hosts).each do |ob|
       objects = get_objects(ob)
 
@@ -107,7 +78,6 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(objects: objects)
-        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -132,7 +102,6 @@ action :add do
         retries 2
         cookbook 'f2k'
         variables(objects: objects)
-        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
@@ -144,12 +113,11 @@ action :add do
         mode '0644'
         retries 2
         cookbook 'f2k'
-        notifies :reload, 'service[f2k]', :delayed unless node['redborder']['leader_configuring']
       end
     end
 
     begin
-      app_db = datab_bag_item('rBglobal', 'applications')
+      app_db = data_bag_item('rBglobal', 'applications')
     rescue
       app_db = nil
     end
@@ -204,7 +172,7 @@ action :register do
       query['ID'] = "f2k-#{node['hostname']}"
       query['Name'] = 'f2k'
       query['Address'] = "#{node['ipaddress']}"
-      query['Port'] = 2055
+      query['Port'] = node['f2k']['port']
       json_query = Chef::JSONCompat.to_json(query)
 
       execute 'Register service in consul' do
