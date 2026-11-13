@@ -118,7 +118,7 @@ action :add do
     end
 
     begin
-      app_db = datab_bag_item('rBglobal', 'applications')
+      app_db = data_bag_item('rBglobal', 'applications')
     rescue
       app_db = nil
     end
