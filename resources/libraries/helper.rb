@@ -10,8 +10,8 @@ module F2k
     # x2kafka enriches each flow with the whole enrichment_map entry matching the
     # exporter IP, so every sensor IP gets one flat entry. home_nets and span_port
     # are per listener in x2kafka, so they are merged across all the sensors.
-    # settings: port, bind, brokers, topic, stats_port and template_ttl of the resource.
-    def x2kafka_config(sensors, settings)
+    # Ports, brokers, topic and template TTL come from the node['f2k'] attributes.
+    def x2kafka_config(sensors)
       enrichment_map = {}
       observations = {}
       home_nets = []
@@ -66,27 +66,26 @@ module F2k
       listener = {
         'name' => 'f2k',
         'proto' => 'netflow',
-        'bind' => settings[:bind],
-        'port' => settings[:port],
-        'topic' => settings[:topic],
+        'bind' => '0.0.0.0',
+        'port' => node['f2k']['port'],
+        'topic' => node['f2k']['kafka_topic'],
         'span_port' => !span_ports.empty? && span_ports.all?,
         'enrichment_key' => 'sensor_ip',
         'enrichment_map' => enrichment_map,
-        # x2kafka only refreshes a template when the exporter resends it
-        'template_ttl_seconds' => settings[:template_ttl],
+        'template_ttl_seconds' => node['f2k']['template_ttl'],
       }
       # without home_nets x2kafka falls back to the private ranges
       listener['home_nets'] = home_nets.uniq unless home_nets.empty?
 
       {
-        'brokers' => settings[:brokers],
-        'topic' => settings[:topic],
+        'brokers' => node['f2k']['kafka_brokers'].to_a,
+        'topic' => node['f2k']['kafka_topic'],
         'client_id' => 'f2k',
         'async' => true,
         'stats_socket' => '/run/f2k/f2k.sock',
         # keepalived health checks /health on this port from the other managers
         'stats_bind' => '0.0.0.0',
-        'stats_port' => settings[:stats_port],
+        'stats_port' => node['f2k']['stats_port'],
         'hosts_path' => '/etc/objects',
         'applications_file' => '/etc/objects/applications',
         'listeners' => [listener],
